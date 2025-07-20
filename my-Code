@@ -10,14 +10,113 @@ class PriceComparisonApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Price Comparison', // Changed title
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      title: 'X Price Scout',
+      theme: ThemeData(
+        primaryColor: Color(0xFF0D1B2A),
+        scaffoldBackgroundColor: Colors.white,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFF1B263B),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
+// 🔐 Login Page with Modern Design
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void _login() {
+    final user = usernameController.text.trim();
+    final pass = passwordController.text.trim();
+
+    if (user == "admin" && pass == "admin") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Login Failed"),
+          content: const Text("Incorrect username or password."),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFE8F1F2),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Icon(Icons.price_check_rounded, size: 80, color: Color(0xFF1B263B)),
+                const SizedBox(height: 20),
+                Text(
+                  "X Price Scout",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1B263B),
+                    shadows: [Shadow(blurRadius: 3, color: Colors.black26, offset: Offset(1, 2))],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                TextField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(labelText: "Username"),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: "Password"),
+                ),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _login,
+                    child: const Text("Login", style: TextStyle(fontSize: 16)),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 💰 Home Page
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -38,18 +137,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Compare Prices')),
+      appBar: AppBar(
+        title: const Text('Compare Prices'),
+        backgroundColor: Color(0xFF1B263B),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             TextField(
               controller: _searchController,
               decoration: const InputDecoration(
-                hintText: 'Search for a product (e.g., Tea Cup)',
-                border: OutlineInputBorder(),
-                suffixIcon: Icon(Icons.search),
+                hintText: 'Search (e.g., iPhone 15 Pro)',
+                prefixIcon: Icon(Icons.search),
               ),
             ),
             const SizedBox(height: 12),
@@ -57,8 +157,7 @@ class _HomePageState extends State<HomePage> {
               controller: _pincodeController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                hintText: 'Enter your pincode',
-                border: const OutlineInputBorder(),
+                hintText: 'Enter pincode',
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
@@ -70,24 +169,51 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Sample Product Result:',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            const SizedBox(height: 10),
             Expanded(
               child: ListView(
-                children: <Widget>[
+                children: [
                   ProductComparisonCard(
-                    imageUrl: 'https://www.gstatic.com/flutter-onestack-prototype/genui/example_1.jpg',
-                    title: 'Modern Ceramic Tea Cup',
-                    sellers: <SellerInfo>[
-                      SellerInfo(name: 'Amazon', price: '₹249', delivery: '2-3 Days', rating: '4.3', coupon: 'AMZ10', min: '₹199', max: '₹299', predict: '₹269', affiliateUrl: 'https://amzn.to/example1'),
-                      SellerInfo(name: 'Flipkart', price: '₹259', delivery: '3-5 Days', rating: '4.2', coupon: 'FKT15', min: '₹209', max: '₹289', predict: '₹279', affiliateUrl: 'https://fkrt.it/example2'),
-                      SellerInfo(name: 'Meesho', price: '₹235', delivery: '5-7 Days', rating: '4.0', coupon: '', min: '₹199', max: '₹279', predict: '₹250', affiliateUrl: 'https://meesho.link/example3'),
+                    imageUrl: 'https://m.media-amazon.com/images/I/81SigpJN1KL._SX679_.jpg',
+                    title: 'iPhone 15 Pro 128GB - Natural Titanium',
+                    sellers: [
+                      SellerInfo(
+                        name: 'Amazon',
+                        price: '₹134,900',
+                        delivery: '2 Days',
+                        rating: '4.6',
+                        coupon: 'AMZ10',
+                        min: '₹129,000',
+                        max: '₹139,000',
+                        predict: '₹134,000',
+                        affiliateUrl: 'https://www.amazon.in/dp/B0CHX2F5QT',
+                      ),
+                      SellerInfo(
+                        name: 'Flipkart',
+                        price: '₹134,900',
+                        delivery: '3 Days',
+                        rating: '4.5',
+                        coupon: 'FKT15',
+                        min: '₹130,000',
+                        max: '₹138,000',
+                        predict: '₹135,000',
+                        affiliateUrl:
+                            'https://www.flipkart.com/apple-iphone-15-pro-natural-titanium-128-gb/p/itm0c6e0ed8e2b9d',
+                      ),
+                      SellerInfo(
+                        name: 'Croma',
+                        price: '₹134,900',
+                        delivery: '4 Days',
+                        rating: '4.4',
+                        coupon: 'CRM10',
+                        min: '₹131,000',
+                        max: '₹137,000',
+                        predict: '₹134,000',
+                        affiliateUrl:
+                            'https://www.croma.com/apple-iphone-15-pro-128gb-natural-titanium/p/300677',
+                      ),
                     ],
                     userPincode: userPincode,
-                  ),
+                  )
                 ],
               ),
             )
@@ -98,6 +224,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+// 🧩 Product Card
 class ProductComparisonCard extends StatelessWidget {
   final String imageUrl;
   final String title;
@@ -115,25 +242,26 @@ class ProductComparisonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Row(
-              children: <Widget>[
+              children: [
                 Image.network(imageUrl, width: 80, height: 80),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                ),
+                Expanded(child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             const Text('Compare from Sellers:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-            ...sellers.map<Widget>((SellerInfo seller) => SellerRow(seller: seller, pincode: userPincode)).toList(),
+            ...sellers
+                .map((seller) => SellerRow(seller: seller, pincode: userPincode))
+                .toList(),
           ],
         ),
       ),
@@ -141,6 +269,45 @@ class ProductComparisonCard extends StatelessWidget {
   }
 }
 
+// 🔗 Each Seller Row
+class SellerRow extends StatelessWidget {
+  final SellerInfo seller;
+  final String pincode;
+
+  const SellerRow({super.key, required this.seller, required this.pincode});
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.grey.shade100,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: ListTile(
+        title: Text(seller.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Price: ${seller.price} | Delivery: ${seller.delivery} | Rating: ${seller.rating}'),
+            Text('Price Stats - Min: ${seller.min}, Max: ${seller.max}, Predict: ${seller.predict}'),
+            if (seller.coupon.isNotEmpty) Text('Coupon: ${seller.coupon}', style: const TextStyle(color: Colors.green)),
+            if (pincode.isNotEmpty) Text('Est. Delivery: ${seller.delivery}', style: const TextStyle(color: Colors.blue)),
+          ],
+        ),
+        trailing: ElevatedButton(
+          onPressed: () => _launchUrl(Uri.parse(seller.affiliateUrl)),
+          child: const Text('Buy'),
+        ),
+      ),
+    );
+  }
+}
+
+// 📦 Data Class
 class SellerInfo {
   final String name;
   final String price;
@@ -163,43 +330,4 @@ class SellerInfo {
     required this.predict,
     required this.affiliateUrl,
   });
-}
-
-class SellerRow extends StatelessWidget {
-  final SellerInfo seller;
-  final String pincode;
-
-  const SellerRow({super.key, required this.seller, required this.pincode});
-
-  Future<void> _launchUrl(Uri url) async {
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw 'Could not launch $url';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey.shade100,
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: ListTile(
-        title: Text(seller.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('Price: ${seller.price} | Delivery: ${seller.delivery} | Rating: ${seller.rating}'),
-            Text('Price Stats - Min: ${seller.min}, Max: ${seller.max}, Predict: ${seller.predict}'),
-            if (seller.coupon.isNotEmpty) Text('Coupon: ${seller.coupon}', style: const TextStyle(color: Colors.green)),
-            if (pincode.isNotEmpty) Text('Est. Delivery for $pincode: ${seller.delivery}', style: const TextStyle(color: Colors.blue)),
-          ],
-        ),
-        trailing: ElevatedButton(
-          onPressed: () {
-            _launchUrl(Uri.parse(seller.affiliateUrl));
-          },
-          child: const Text('Buy Now'),
-        ),
-      ),
-    );
-  }
 }
